@@ -1,9 +1,9 @@
-package com.atguigu.transform
+package com.atguigu.ch03_transform
 
 import com.atguigu.SensorEntity
 import org.apache.flink.streaming.api.scala._
 
-object KeyByReduceOperator {
+object SplitOperator {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
 
@@ -16,12 +16,19 @@ object KeyByReduceOperator {
       SensorEntity("s02", 1547719201, 15.402984393403084),
       SensorEntity("s04", 1547719205, 38.101067604893444)
     ))
-      .keyBy("id")
-      // 输出当前传感器温度+10，时间戳是上一次数据时间+1
-      .reduce((x, y) => SensorEntity(x.id, x.timestamp+1, y.temperature+10))
 
-    sensorStream.print()
+    val splitStream: SplitStream[SensorEntity] = sensorStream.split(data => {
+      if (data.temperature > 30) Seq("high") else Seq("low")
+    })
 
-    env.execute("KeyByReduce Operator")
+    val high: DataStream[SensorEntity] = splitStream.select("high")
+    val low: DataStream[SensorEntity] = splitStream.select("low")
+    val all: DataStream[SensorEntity] = splitStream.select("high", "low")
+
+    high.print("high")
+    low.print("low")
+    all.print("all")
+
+    env.execute("Split Operator")
   }
 }

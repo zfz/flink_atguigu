@@ -1,4 +1,4 @@
-package com.atguigu.state
+package com.atguigu.ch07_state
 
 import com.atguigu.SensorEntity
 import org.apache.flink.api.common.restartstrategy.RestartStrategies
@@ -62,7 +62,7 @@ object CheckpointFunctionExample {
 }
 
 /**
- *  华氏温度低于32度（0度），作为低温，第一个泛型是输入类型，第二个泛型是输出类型
+ * 华氏温度低于32度（0度），作为低温，第一个泛型是输入类型，第二个泛型是输出类型
  */
 class FreezingMonitor() extends ProcessFunction[SensorEntity, SensorEntity] {
   // 定义一个侧输出流标签，需要指定侧输出流的类型

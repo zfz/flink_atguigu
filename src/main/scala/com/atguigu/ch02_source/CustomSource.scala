@@ -1,4 +1,4 @@
-package com.atguigu.source
+package com.atguigu.ch02_source
 
 import com.atguigu.SensorEntity
 import org.apache.flink.streaming.api.functions.source.SourceFunction

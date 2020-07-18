@@ -1,9 +1,9 @@
-package com.atguigu.transform
+package com.atguigu.ch03_transform
 
 import com.atguigu.SensorEntity
 import org.apache.flink.streaming.api.scala._
 
-object ConnectOperator {
+object UnionOperator {
   def main(args: Array[String]): Unit = {
     val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
 
@@ -24,17 +24,11 @@ object ConnectOperator {
     val high: DataStream[SensorEntity] = splitStream.select("high")
     val low: DataStream[SensorEntity] = splitStream.select("low")
 
-    val warning: DataStream[(String, Double)] = high.map(data => (data.id, data.temperature))
+    // Union可以连接多条流，多条流的数据结构需要相同，不同与Connect
+    val unionStream: DataStream[SensorEntity] = high.union(low)
 
-    val connectedStream: ConnectedStreams[(String, Double), SensorEntity] = warning.connect(low)
+    unionStream.print("union stream")
 
-    // 两条流数据结构可以不同，Connect只能连接两条流
-    val coMapStream: DataStream[Product with Serializable] = connectedStream.map(
-      warningData => (warningData._1, warningData._2, "warning"),
-      lowData => (lowData.id, "healthy")
-    )
-
-    coMapStream.print("connect stream")
-    env.execute("Connected Operator")
+    env.execute("Union Operator")
   }
 }

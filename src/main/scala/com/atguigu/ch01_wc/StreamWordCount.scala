@@ -1,4 +1,4 @@
-package com.atguigu.wc
+package com.atguigu.ch01_wc
 
 // 隐式转换需要
 import org.apache.flink.api.java.utils.ParameterTool

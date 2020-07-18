@@ -1,14 +1,11 @@
-package com.atguigu.transform
+package com.atguigu.ch03_transform
 
 import com.atguigu.SensorEntity
 import org.apache.flink.streaming.api.scala._
 
-object KeyBySumOperator {
+object KeyByReduceOperator {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
-
-    // 设置多余1的并行度，因为多线程的原因，结果不是按顺序执行
-    // env.setParallelism(1)
 
     val sensorStream: DataStream[SensorEntity] = env.fromCollection(List(
       SensorEntity("s01", 1547718199, 35.80018327300259),
@@ -19,13 +16,12 @@ object KeyBySumOperator {
       SensorEntity("s02", 1547719201, 15.402984393403084),
       SensorEntity("s04", 1547719205, 38.101067604893444)
     ))
-//      .keyBy(0)
-//      .sum(2)
-        .keyBy("id")
-        .sum("temperature")
+      .keyBy("id")
+      // 输出当前传感器温度+10，时间戳是上一次数据时间+1
+      .reduce((x, y) => SensorEntity(x.id, x.timestamp+1, y.temperature+10))
 
     sensorStream.print()
 
-    env.execute("KeyBySum Operator")
+    env.execute("KeyByReduce Operator")
   }
 }

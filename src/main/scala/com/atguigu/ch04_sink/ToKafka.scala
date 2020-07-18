@@ -1,4 +1,4 @@
-package com.atguigu.sink
+package com.atguigu.ch04_sink
 
 import com.atguigu.SensorEntity
 import org.apache.flink.api.common.serialization.SimpleStringSchema

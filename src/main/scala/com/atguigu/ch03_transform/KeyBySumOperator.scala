@@ -1,11 +1,14 @@
-package com.atguigu.transform
+package com.atguigu.ch03_transform
 
 import com.atguigu.SensorEntity
 import org.apache.flink.streaming.api.scala._
 
-object SplitOperator {
+object KeyBySumOperator {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
+
+    // 设置多余1的并行度，因为多线程的原因，结果不是按顺序执行
+    // env.setParallelism(1)
 
     val sensorStream: DataStream[SensorEntity] = env.fromCollection(List(
       SensorEntity("s01", 1547718199, 35.80018327300259),
@@ -16,19 +19,13 @@ object SplitOperator {
       SensorEntity("s02", 1547719201, 15.402984393403084),
       SensorEntity("s04", 1547719205, 38.101067604893444)
     ))
+//      .keyBy(0)
+//      .sum(2)
+        .keyBy("id")
+        .sum("temperature")
 
-    val splitStream: SplitStream[SensorEntity] = sensorStream.split(data => {
-      if (data.temperature > 30) Seq("high") else Seq("low")
-    })
+    sensorStream.print()
 
-    val high: DataStream[SensorEntity] = splitStream.select("high")
-    val low: DataStream[SensorEntity] = splitStream.select("low")
-    val all: DataStream[SensorEntity] = splitStream.select("high", "low")
-
-    high.print("high")
-    low.print("low")
-    all.print("all")
-
-    env.execute("Split Operator")
+    env.execute("KeyBySum Operator")
   }
 }

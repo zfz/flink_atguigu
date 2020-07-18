@@ -1,4 +1,4 @@
-package com.atguigu.transform
+package com.atguigu.ch03_transform
 
 import com.atguigu.SensorEntity
 import org.apache.flink.streaming.api.scala._

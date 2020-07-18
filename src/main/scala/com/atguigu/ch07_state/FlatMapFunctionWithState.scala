@@ -1,4 +1,4 @@
-package com.atguigu.state
+package com.atguigu.ch07_state
 
 import com.atguigu.SensorEntity
 import org.apache.flink.configuration.{ConfigConstants, Configuration}

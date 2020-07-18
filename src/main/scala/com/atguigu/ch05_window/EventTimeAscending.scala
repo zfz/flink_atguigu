@@ -1,4 +1,4 @@
-package com.atguigu.window
+package com.atguigu.ch05_window
 
 import com.atguigu.SensorEntity
 import org.apache.flink.streaming.api.TimeCharacteristic

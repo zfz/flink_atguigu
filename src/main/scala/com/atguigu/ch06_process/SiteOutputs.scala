@@ -1,4 +1,4 @@
-package com.atguigu.process
+package com.atguigu.ch06_process
 
 import com.atguigu.SensorEntity
 import org.apache.flink.configuration.{ConfigConstants, Configuration}
